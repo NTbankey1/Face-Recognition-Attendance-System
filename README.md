@@ -3,6 +3,12 @@
 A robust system designed to authenticate individuals and record attendance using **facial recognition technology** powered by deep learning. This project simplifies attendance tracking for classrooms, workplaces, or events.
 
 ---
+## 📚 Tài liệu
+
+- **[Hướng dẫn sử dụng chi tiết](HUONG_DAN_SU_DUNG.md)** - Hướng dẫn đầy đủ cho Quản trị viên và Giảng viên
+- **[Hướng dẫn Docker](DOCKER.md)** - Dựng hệ thống bằng Docker Compose
+
+---
 ## 🚢 Chạy bằng Docker
 Xem `DOCKER.md` để dựng nhanh hệ thống bằng Docker Compose.
 
@@ -54,6 +60,13 @@ Sau khi service chạy, vào giao diện Giảng viên → Điểm danh. Hệ th
 ## 🔐 Face Login Workflow
 
 1. **Chuẩn bị dữ liệu khuôn mặt cho giảng viên/quản trị viên**
+
+### 📸 Gợi ý chụp ảnh & kiểm tra chất lượng
+
+- Từ trang `Quản trị viên → Sinh viên`, dùng nút chụp ảnh mới để ghi lại 5 khuôn mặt với các góc/ánh sáng khác nhau.
+- Mỗi ảnh sẽ được gửi tới endpoint `/quality` của backend để chấm điểm độ sắc nét (blur), ánh sáng và báo trạng thái **Đạt / Tạm ổn / Chưa đạt** ngay lập tức.
+- Hệ thống chỉ đưa ảnh sắc nét vào tập embeddings (nếu bật `FACE_STRICT_ENROLLMENT=1`). Vì vậy, nếu thấy cảnh báo “Chưa đạt”, hãy chụp lại để tránh bị loại.
+- Giữ khoảng cách 0.5–1m, đảm bảo mặt chiếm tối thiểu 80px, ánh sáng đều 2 bên. Hạn chế đeo khẩu trang/che mặt khi đăng ký dữ liệu.
    - Mỗi người dùng nên có thư mục trong `resources/labels/` (ví dụ `resources/labels/admin@gmail.com/`).
    - Có thể tái sử dụng `tools/prepare_images.py` để cân bằng ánh sáng và tăng cường dữ liệu.
 2. **Chạy backend nhận diện** (xem [Kiến trúc nhận diện mới](#-kiến-trúc-nhận-diện-mới-yolo--arcface)).

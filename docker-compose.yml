@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: attendance_db
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppass
+      MYSQL_ROOT_PASSWORD: rootpass
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database/attendance-db.sql:/docker-entrypoint-initdb.d/1-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -prootpass --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build:
+      context: ./services/web
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+    environment:
+      DB_HOST: db
+      DB_NAME: attendance_db
+      DB_USER: appuser
+      DB_PASS: apppass
+      FACE_SERVICE_URL: http://face_backend:8001
+      FACE_LABELS_DIR: /var/www/html/resources/labels_runtime
+
+  face_backend:
+    build:
+      context: ./services/face_backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      FACE_LOGIN_MIN_SCORE: "0.55"
+      FACE_MIN_CONFIDENCE: "0.2"
+      FACE_MIN_BOX: "10"
+      FACE_SIM_THRESHOLD: "0.3"
+      FACE_LABELS_DIR: /app/resources/labels_runtime
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./services/face_backend/weights:/app/weights
+      - ./resources/labels_runtime:/app/resources/labels_runtime
+      - ./resources/logs:/app/resources/logs
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PMA_HOST: db
+      PMA_USER: appuser
+      PMA_PASSWORD: apppass
+      UPLOAD_LIMIT: 128M
+    ports:
+      - "8081:80"
+
+volumes:
+  db_data:

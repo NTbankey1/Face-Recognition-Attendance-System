@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+dist/
+build/
+
+# Models & Weights (too large for git)
+services/face_backend/weights/*.pt
+services/face_backend/weights/*.onnx
+models/*.shard*
+models/*-weights_manifest.json
+
+# Logs
+resources/logs/**/*.jsonl
+*.log
+
+# Database
+*.sql.backup
+*.db
+*.sqlite
+
+# Images & Labels (runtime generated)
+resources/labels_runtime/
+resources/labels/**/*.jpg
+resources/labels/**/*.png
+resources/labels_raw/**/*.jpg
+resources/labels_raw/**/*.png
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+tmp_check.php
+*.tmp
+*.temp
+
+# Node modules (if any)
+node_modules/
+package-lock.json
+
+# Docker volumes
+docker-volumes/
+
+# Cache
+*.cache
+
