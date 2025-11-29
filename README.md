@@ -1,216 +1,382 @@
-﻿# **Face Recognition Attendance System**
+﻿# Face Recognition Attendance System
 
-A robust system designed to authenticate individuals and record attendance using **facial recognition technology** powered by deep learning. This project simplifies attendance tracking for classrooms, workplaces, or events.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+[![PHP](https://img.shields.io/badge/PHP-7.4+-purple.svg)](https://www.php.net/)
+[![MySQL](https://img.shields.io/badge/MySQL-5.7+-orange.svg)](https://www.mysql.com/)
 
----
-## 📚 Tài liệu
+A robust **face recognition-based attendance system** powered by deep learning (YOLO + ArcFace) that simplifies attendance tracking for classrooms, workplaces, and events. The system provides real-time face recognition, automatic attendance marking, and comprehensive administrative features.
 
-- **[Hướng dẫn sử dụng chi tiết](HUONG_DAN_SU_DUNG.md)** - Hướng dẫn đầy đủ cho Quản trị viên và Giảng viên
-- **[Hướng dẫn Docker](DOCKER.md)** - Dựng hệ thống bằng Docker Compose
+## 🌟 Features
 
----
-## 🚢 Chạy bằng Docker
-Xem `DOCKER.md` để dựng nhanh hệ thống bằng Docker Compose.
+- 🔐 **Face Recognition Login** - Secure authentication using facial recognition
+- 📸 **Real-time Attendance Tracking** - Automatic attendance marking with live camera feed
+- 👥 **Role-based Access Control** - Separate interfaces for administrators and lecturers
+- 📊 **Comprehensive Management** - Manage students, courses, units, and venues
+- 📈 **Reporting & Export** - Export attendance records to Excel format
+- 📝 **Activity Logging** - Complete audit trail with JSONL logs
+- 🎯 **Quality Control** - Automatic image quality checking during enrollment
+- 🐳 **Docker Support** - Easy deployment with Docker Compose
 
----
+## 📚 Documentation
 
-## 🔄 Kiến trúc nhận diện mới (YOLO + ArcFace)
+- **[Hướng dẫn sử dụng chi tiết](HUONG_DAN_SU_DUNG.md)** - Comprehensive guide for Administrators and Lecturers (Vietnamese)
+- **[Hướng dẫn Docker](DOCKER.md)** - Docker deployment guide (Vietnamese)
+- **[Phân công công việc](PHAN_CONG_CONG_VIEC.md)** - Team task assignment document (Vietnamese)
+- **[Tài liệu thuyết trình](PRESENTATION.md)** - Presentation materials (Vietnamese)
 
-- **Backend FastAPI** (`services/face_backend/`):
-  - YOLO (`yolov8n-face.pt`) để phát hiện khuôn mặt.
-  - ArcFace (`arcface_r100_v1`) để sinh embedding và so khớp cosine.
-  - API chính: `POST /match`, `POST /reload`, `GET /health`.
-- **Frontend (Giảng viên)** gửi frame định kỳ tới backend, nhận danh sách nhãn + độ tin cậy, tự đánh dấu "Có mặt" trên bảng.
-- Log hoạt động của Admin và Người dùng được lưu lại dưới dạng JSONL trong `resources/logs/`.
+## 🏗️ System Architecture
 
-### Cài backend nhận diện
+### Technology Stack
+
+**Backend (Face Recognition):**
+- **FastAPI** (Python) - RESTful API server
+- **YOLOv8n-face** - Face detection model
+- **ArcFace (R100)** - Face embedding and matching
+
+**Frontend:**
+- **PHP** - Server-side logic
+- **JavaScript (ES6+)** - Client-side interactions
+- **HTML/CSS** - User interface
+
+**Database:**
+- **MySQL** - Data persistence
+
+**Deployment:**
+- **Docker & Docker Compose** - Containerization
+- **Apache/Nginx** - Web server
+
+### Recognition Pipeline
+
+```
+Camera Feed → YOLO Detection → ArcFace Embedding → Cosine Matching → Attendance Update
+```
+
+1. **Face Detection**: YOLO detects faces in video frames
+2. **Feature Extraction**: ArcFace generates face embeddings
+3. **Matching**: Cosine similarity comparison with enrolled faces
+4. **Attendance Marking**: Automatic marking when confidence ≥ 0.4 in ≥2 consecutive frames
+
+## 🚀 Quick Start
+
+### Option 1: Docker (Recommended)
+
+The easiest way to get started:
+
 ```bash
-# Tải trọng số YOLO (một lần)
-mkdir -p services/face_backend/weights
-wget -O services/face_backend/weights/yolov8n-face.pt \
+# Clone the repository
+git clone git@github.com:NTbankey1/Face-Recognition-Attendance-System.git
+cd Face-Recognition-Attendance-System
+
+# See DOCKER.md for detailed Docker setup instructions
+```
+
+### Option 2: Manual Installation
+
+#### Prerequisites
+
+- Python 3.8+
+- PHP 7.4+
+- MySQL 5.7+
+- Apache/Nginx web server
+- Webcam for face recognition
+
+#### Step 1: Clone Repository
+
+```bash
+git clone git@github.com:NTbankey1/Face-Recognition-Attendance-System.git
+cd Face-Recognition-Attendance-System
+```
+
+#### Step 2: Setup Database
+
+1. Create a MySQL database (e.g., `attendance_db`)
+2. Import the database schema:
+   ```bash
+   mysql -u root -p attendance_db < database/attendance-db.sql
+   ```
+3. Update database connection in `database/database_connection.php`
+
+#### Step 3: Setup Face Recognition Backend
+
+```bash
+# Navigate to backend directory
+cd services/face_backend
+
+# Create virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Download YOLO model weights
+mkdir -p weights
+wget -O weights/yolov8n-face.pt \
   https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8n-face.pt
 
-# Cài môi trường & chạy service (port 8001)
-cd services/face_backend
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+# Run the backend service
 uvicorn main:app --host 0.0.0.0 --port 8001 --reload
 ```
-> ArcFace ONNX sẽ được InsightFace tự tải lần đầu (nhớ bật mạng).
 
-### Khởi chạy nhanh
-```bash
-# từ thư mục gốc dự án
-./start_face_service.sh   # đảm bảo đã tạo venv & cài deps trước đó
+> **Note**: ArcFace ONNX model will be automatically downloaded by InsightFace on first run (requires internet connection).
+
+#### Step 4: Setup Web Frontend
+
+1. Copy project to web server directory:
+   - **XAMPP**: `xampp/htdocs/Face-Recognition-Attendance-System`
+   - **Linux Apache**: `/var/www/html/Face-Recognition-Attendance-System`
+
+2. Start Apache and MySQL services
+
+3. Access the application:
+   ```
+   http://localhost/Face-Recognition-Attendance-System
+   ```
+
+## 📖 Usage Guide
+
+### Default Login Credentials
+
+**Administrator:**
+- Email: `admin@gmail.com`
+- Password: `@admin_`
+
+**Lecturer (Sample):**
+- Email: `mark@gmail.com`
+- Password: `@mark_`
+
+> **Important**: For security, change default passwords after first login.
+
+### Administrator Features
+
+1. **Student Management**
+   - Add/Edit/Delete students
+   - Capture 5 face images per student
+   - Automatic image quality validation
+   - Face enrollment with augmentation
+
+2. **Course & Unit Management**
+   - Create and manage courses
+   - Define units and their relationships
+   - Assign lecturers to courses
+
+3. **Venue Management**
+   - Add venues (classrooms, labs, halls)
+   - Upload venue images
+   - Set venue descriptions
+
+4. **Lecturer Management**
+   - Create lecturer accounts
+   - Assign courses to lecturers
+   - Manage permissions
+
+### Lecturer Features
+
+1. **Attendance Taking**
+   - Select course, unit, and venue
+   - Launch face recognition feature
+   - Real-time face detection and recognition
+   - Automatic attendance marking
+
+2. **View & Export**
+   - View attendance records
+   - Export to Excel format
+   - Filter by date, course, or venue
+
+### Face Login Workflow
+
+1. **Prepare Face Data** (Admin/Lecturer)
+   - Capture 5 face images from different angles
+   - System validates image quality (blur, brightness)
+   - Images stored in `resources/labels/[email]/`
+
+2. **Start Backend Service**
+   - Run FastAPI backend on port 8001
+   - Backend loads face embeddings on startup
+
+3. **Login**
+   - Select user type (Administrator/Lecturer)
+   - Click "Face Login" button
+   - Position face in camera frame
+   - System authenticates automatically
+
+4. **Label Mapping**
+   - System creates `face_login_map` table automatically
+   - Labels matched to user accounts by email/ID
+   - Manual mapping also supported
+
+5. **Configuration**
+   - Adjust recognition threshold via `FACE_LOGIN_MIN_SCORE` (default: 0.55)
+
+## 🔧 API Endpoints
+
+### Face Recognition Backend (Port 8001)
+
+**POST `/match`** - Face Recognition
+```json
+Request:
+{
+  "image": "base64_encoded_image",
+  "user_type": "lecturer" | "administrator" (optional)
+}
+
+Response:
+{
+  "matches": [
+    {
+      "label": "student_id@example.com",
+      "score": 0.85,
+      "bbox": [x1, y1, x2, y2]
+    }
+  ]
+}
 ```
 
-Sau khi service chạy, vào giao diện Giảng viên → Điểm danh. Hệ thống sẽ tự gửi frame tới `http://localhost:8001/match`, hiển thị khung YOLO và đánh dấu "Có mặt" khi độ tin cậy ≥ 0.4 trong ≥2 khung hình liên tiếp.
+**POST `/quality`** - Image Quality Check
+```json
+Request:
+{
+  "image": "base64_encoded_image"
+}
+
+Response:
+{
+  "status": "good" | "acceptable" | "poor",
+  "blur_score": 0.75,
+  "brightness": 0.6,
+  "face_size": 150
+}
+```
+
+**POST `/reload`** - Reload Face Embeddings
+- Reloads all face embeddings from `resources/labels/`
+- Useful after adding/updating student faces
+
+**GET `/health`** - Health Check
+```json
+Response:
+{
+  "status": "healthy",
+  "model_loaded": true,
+  "faces_count": 50
+}
+```
+
+## 📁 Project Structure
+
+```
+Face-Recognition-Attendance-System/
+├── database/
+│   ├── attendance-db.sql           # Database schema
+│   ├── database_connection.php     # DB connection config
+│   ├── sample_data.sql             # Sample data
+│   └── generate_password_hash.php  # Password utility
+├── services/
+│   ├── face_backend/               # FastAPI face recognition service
+│   │   ├── main.py                 # FastAPI application
+│   │   ├── requirements.txt        # Python dependencies
+│   │   ├── Dockerfile              # Docker config
+│   │   └── weights/                # Model weights (gitignored)
+│   └── web/                        # Web service
+│       ├── Dockerfile
+│       └── apache-vhost.conf
+├── resources/
+│   ├── api/                        # API endpoints
+│   │   └── face-login.php
+│   ├── assets/                     # Frontend assets
+│   │   ├── css/                    # Stylesheets
+│   │   └── javascript/             # JavaScript files
+│   │       └── face_logics/        # Face recognition JS
+│   ├── images/                     # Static images
+│   ├── labels/                     # Enrolled face images (gitignored)
+│   ├── labels_raw/                 # Raw face images (gitignored)
+│   ├── lib/                        # PHP libraries
+│   │   └── php_functions.php
+│   ├── logs/                       # Activity logs (gitignored)
+│   └── pages/                      # PHP pages
+│       ├── administrator/          # Admin pages
+│       ├── lecture/                # Lecturer pages
+│       └── login.php               # Login page
+├── models/                         # Face-API JavaScript models
+├── tools/                          # Utility scripts
+│   ├── prepare_images.py           # Image preprocessing
+│   └── test_match.py               # Testing utilities
+├── docker-compose.yml              # Docker Compose config
+├── index.php                       # Entry point
+├── router.php                      # URL router
+├── .htaccess                       # Apache rewrite rules
+└── README.md                       # This file
+```
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+**Backend Service** (`.env` in `services/face_backend/`):
+```env
+FACE_LOGIN_MIN_SCORE=0.55          # Login recognition threshold
+FACE_ATTENDANCE_MIN_SCORE=0.4      # Attendance recognition threshold
+FACE_STRICT_ENROLLMENT=1            # Strict quality check for enrollment
+PORT=8001                           # Backend port
+```
+
+**Frontend** (`database/database_connection.php`):
+```php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "attendance_db";
+```
+
+## 🔒 Security Considerations
+
+- ⚠️ **Change default passwords** immediately after installation
+- 🔐 Use strong passwords for database connections
+- 🌐 Implement HTTPS in production environments
+- 👤 Regular review of activity logs
+- 🔄 Keep dependencies updated for security patches
+
+## 📊 Recognition Performance
+
+- **Detection Threshold**: Confidence ≥ 0.4 for attendance
+- **Login Threshold**: Confidence ≥ 0.55 for authentication
+- **Confirmation**: Requires ≥2 consecutive frame matches
+- **Processing Speed**: Real-time processing (~30 FPS capable)
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📜 License
+
+This project is licensed under the **MIT License** - see the LICENSE file for details.
+
+## 👨‍💻 Author
+
+**NTbankey1**
+
+- GitHub: [@NTbankey1](https://github.com/NTbankey1)
+- Repository: [Face-Recognition-Attendance-System](https://github.com/NTbankey1/Face-Recognition-Attendance-System)
+
+## 🙏 Acknowledgments
+
+- Original project inspiration: [Francis Njenga](https://github.com/francis-njenga)
+- YOLO face detection: [Ultralytics](https://github.com/ultralytics)
+- ArcFace implementation: [InsightFace](https://github.com/deepinsight/insightface)
+
+## 📧 Support
+
+For issues, questions, or contributions:
+- 📧 Open an issue on [GitHub Issues](https://github.com/NTbankey1/Face-Recognition-Attendance-System/issues)
+- 📖 Check the documentation files in the repository
 
 ---
 
-## 📋 Features
-
-- Role-based access for **administrators**, **người dùng** (giảng viên).
-- Manage courses, units, venues, and attendance records through an intuitive interface.
-- Capture và lưu nhiều ảnh/label cho mỗi sinh viên.
-- Logging JSONL cho toàn bộ thao tác thêm dữ liệu/điểm danh.
-- Đăng nhập nhanh bằng khuôn mặt với FastAPI backend và PHP session.
-
-## 🔐 Face Login Workflow
-
-1. **Chuẩn bị dữ liệu khuôn mặt cho giảng viên/quản trị viên**
-
-### 📸 Gợi ý chụp ảnh & kiểm tra chất lượng
-
-- Từ trang `Quản trị viên → Sinh viên`, dùng nút chụp ảnh mới để ghi lại 5 khuôn mặt với các góc/ánh sáng khác nhau.
-- Mỗi ảnh sẽ được gửi tới endpoint `/quality` của backend để chấm điểm độ sắc nét (blur), ánh sáng và báo trạng thái **Đạt / Tạm ổn / Chưa đạt** ngay lập tức.
-- Hệ thống chỉ đưa ảnh sắc nét vào tập embeddings (nếu bật `FACE_STRICT_ENROLLMENT=1`). Vì vậy, nếu thấy cảnh báo “Chưa đạt”, hãy chụp lại để tránh bị loại.
-- Giữ khoảng cách 0.5–1m, đảm bảo mặt chiếm tối thiểu 80px, ánh sáng đều 2 bên. Hạn chế đeo khẩu trang/che mặt khi đăng ký dữ liệu.
-   - Mỗi người dùng nên có thư mục trong `resources/labels/` (ví dụ `resources/labels/admin@gmail.com/`).
-   - Có thể tái sử dụng `tools/prepare_images.py` để cân bằng ánh sáng và tăng cường dữ liệu.
-2. **Chạy backend nhận diện** (xem [Kiến trúc nhận diện mới](#-kiến-trúc-nhận-diện-mới-yolo--arcface)).
-3. **Từ màn hình đăng nhập**
-   - Chọn đúng loại người dùng (Quản trị viên hoặc Người dùng).
-   - Nhấn `Đăng nhập bằng khuôn mặt`, đưa khuôn mặt vào khung hình và chờ hệ thống nhận diện.
-4. **Ánh xạ nhãn → tài khoản**
-   - Hệ thống tạo bảng `face_login_map` (nếu chưa tồn tại) để lưu quan hệ giữa nhãn và user.
-   - Nếu nhãn khớp với email/ID trong `tbladmin` hoặc `tbllecture`, ánh xạ được tạo tự động.
-   - Có thể chủ động thêm ánh xạ:
-     ```sql
-     INSERT INTO face_login_map(label, user_type, user_id)
-     VALUES ('admin@gmail.com', 'administrator', 1);
-     ```
-5. **Tinh chỉnh ngưỡng nhận diện**
-   - Biến môi trường `FACE_LOGIN_MIN_SCORE` (mặc định `0.55`) cho phép siết/giảm yêu cầu độ tin cậy.
-
-> Mẹo: nếu thay đổi dữ liệu trong `resources/labels/`, gọi `POST /reload` của dịch vụ FastAPI để nạp lại embedding.
-
-## Project Structure
-
-````
-## Project Structure
-
-```plaintext
-Face-Recognition-Attendance-System/
-├── database/
-│   ├── attendance-db.sql         # SQL file to set up the database
-│   └── database_connection.php   # Database connection script
-├── models/
-│   └── face-api-models.js        # JavaScript models for Face API
-├── resources/
-│   ├── assets/
-│   │   ├── css/                  # CSS files
-│   │   └── javascript/           # JavaScript files
-│   ├── images/                   # Images directory
-│   ├── labels/                   # Stored images of registered students
-│   ├── lib/
-│   │   └── global-functions.php  # Global PHP functions
-│   ├── pages/
-│   │   ├── admin/                # Admin-specific pages
-│   │   ├── lecturer/             # Lecturer-specific pages
-│   │   └── login.php             # Login page
-├── index.php                     # Main entry point for all pages
-├── .htaccess                     # Redirect rules
-└── README.md                     # Project documentation
-
-
-````
-
-## **🚀 Setup Procedure**
-
-Follow these steps to set up and run the project:
-
-### **1. Clone or Download the Repository**
-
-- Clone the repository using Git:
-  ```bash
-  git clone https://github.com/francis-njenga/Face-Recognition-Attendance-System.git
-  ```
-  -Download zip file
-
-### **2. Place the Project in the Server Directory**
-
-If you’re using XAMPP, place the project folder inside the `htdocs` directory:
-
-```plaintext
-xampp/htdocs/Face-Recognition-Attendance-System
-```
-
-Use a simple folder name, as it will be part of the URL (e.g., attendance-system).
-
-### **3. Start XAMPP**
-
-- Open the XAMPP Control Panel.
-- Start the **Apache** and **MySQL** services.
-
-### **4. Set Up the Database**
-
-- Visit **phpMyAdmin**.
-- Create a new database.
-
-  - Recommended name: `attendance_db` (You can choose any name, but ensure it matches the configuration in your project files).
-
-- Import the SQL file:
-- Locate the `attendance-db.sql` file in the `database/` folder of the project.
-- Import it into the newly created database.
-
-### **5. Launch the Application**
-
-Visit the application in your browser:
-
-```plaintext
-http://localhost/{your-project-folder-name}
-```
-
-## 🧑‍💻 User Guide
-
-### 1. Login as Administrator
-
-- **Email**: `admin@gmail.com`
-- **Password**: `@admin_`
-
-Once logged in, you can:
-
-- Add students.
-- Manage courses, units, and venues.
-
-⚠️ **Important**:
-
-- Ensure to add at least **two students** and capture **five clear images** for each.
-- Poor image quality will affect recognition accuracy. You can retake any image by clicking on it.
-
-### 2. Login as Lecturer
-
-- Create a lecturer account via the admin panel or use a pre-existing one.
-- 
-**Select lecture user type, to be able to login as lecture**
-
-  *if you have issues using this email and password, create your lecture on admin panel*
-
-- **Email**: `mark@gmail.com`
-- **Password**: `@mark_`
-
-As a lecturer:
-
-- Select a course, unit, and venue on the home page.
-- Launch the **Face Recognition** feature to begin attendance.
-
-### Additional Features for the Lecturer Panel
-
-- You can also export the attendance to an **Excel** sheet.
-- Other simple features are available for managing the lecture panel.
-
-📜 License
-This project is licensed under the MIT License.
-
-📧 Support
-For any issues or inquiries, feel free to reach out via email: [Francis Njenga](mailto:rajeynj@gmail.com).
-
-### Visit My Website
-
-https://www.frankcodes.tech
-
-You can send donations to my PayPal account: rajeynjenga@gmail.com
-# Face-Recognition-Attendance-System
-# Face-Recognition-Attendance-System
+**⭐ If you find this project useful, please consider giving it a star!**
