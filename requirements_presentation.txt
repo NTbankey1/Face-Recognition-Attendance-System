@@ -1,0 +1,31 @@
+# requirements_presentation.txt
+# Minimal dependencies for Face Recognition Attendance System Presentation Notebook
+# Install: pip install -r requirements_presentation.txt
+
+# Core Scientific Computing
+numpy>=1.21.0
+matplotlib>=3.4.0
+pandas>=1.3.0
+scikit-learn>=0.24.0
+
+# Computer Vision & Image Processing
+opencv-python>=4.5.0
+Pillow>=8.3.0
+
+# API Framework (for demo)
+fastapi>=0.68.0
+uvicorn>=0.15.0
+nest-asyncio>=1.5.0
+requests>=2.26.0
+
+# Excel Export
+openpyxl>=3.0.0
+
+# Optional: For RISE slideshow
+# RISE>=5.7.0
+
+# Note: This is a lightweight version for CPU-only demo
+# For production with real models, also install:
+# insightface
+# onnxruntime or onnxruntime-gpu
+# ultralytics (for YOLOv8)

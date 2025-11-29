@@ -1,0 +1,177 @@
+{
+  "notebook_file": "FaceRecognition_Attendance_Presentation.ipynb",
+  "total_cells": 23,
+  "markdown_slides": 17,
+  "code_cells": 6,
+  "sections": [
+    {
+      "id": 0,
+      "type": "markdown",
+      "title": "README - Setup Instructions",
+      "slide_type": "skip"
+    },
+    {
+      "id": 1,
+      "type": "markdown",
+      "title": "Title Slide",
+      "slide_type": "slide"
+    },
+    {
+      "id": 2,
+      "type": "markdown",
+      "title": "Table of Contents",
+      "slide_type": "slide"
+    },
+    {
+      "id": 3,
+      "type": "markdown",
+      "title": "Introduction (1/2) - Overview",
+      "slide_type": "slide"
+    },
+    {
+      "id": 4,
+      "type": "markdown",
+      "title": "Introduction (2/2) - Applications",
+      "slide_type": "slide"
+    },
+    {
+      "id": 5,
+      "type": "markdown",
+      "title": "Problem & Solution",
+      "slide_type": "slide"
+    },
+    {
+      "id": 6,
+      "type": "markdown",
+      "title": "Architecture",
+      "slide_type": "slide"
+    },
+    {
+      "id": 7,
+      "type": "markdown",
+      "title": "Data Flow",
+      "slide_type": "slide"
+    },
+    {
+      "id": 8,
+      "type": "markdown",
+      "title": "Technology Stack",
+      "slide_type": "slide"
+    },
+    {
+      "id": 9,
+      "type": "markdown",
+      "title": "Demo Introduction",
+      "slide_type": "slide"
+    },
+    {
+      "id": 10,
+      "type": "code",
+      "title": "Cell A: Setup & Requirements",
+      "slide_type": "subslide"
+    },
+    {
+      "id": 11,
+      "type": "code",
+      "title": "Cell B: Offline Inference Demo",
+      "slide_type": "subslide"
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "title": "Cell C: FastAPI Mock",
+      "slide_type": "subslide"
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "title": "Cell D: Export to Excel",
+      "slide_type": "subslide"
+    },
+    {
+      "id": 14,
+      "type": "markdown",
+      "title": "Quality Control & Thresholds",
+      "slide_type": "slide"
+    },
+    {
+      "id": 15,
+      "type": "code",
+      "title": "Cell E: Quality Control Visualization",
+      "slide_type": "subslide"
+    },
+    {
+      "id": 16,
+      "type": "markdown",
+      "title": "Deployment & Installation",
+      "slide_type": "slide"
+    },
+    {
+      "id": 17,
+      "type": "code",
+      "title": "Cell F: Deployment Configuration",
+      "slide_type": "subslide"
+    },
+    {
+      "id": 18,
+      "type": "markdown",
+      "title": "Results & Metrics",
+      "slide_type": "slide"
+    },
+    {
+      "id": 19,
+      "type": "markdown",
+      "title": "Future Plans",
+      "slide_type": "slide"
+    },
+    {
+      "id": 20,
+      "type": "markdown",
+      "title": "FAQ & Contact",
+      "slide_type": "slide"
+    },
+    {
+      "id": 21,
+      "type": "markdown",
+      "title": "Appendix",
+      "slide_type": "slide"
+    },
+    {
+      "id": 22,
+      "type": "markdown",
+      "title": "Thank You",
+      "slide_type": "slide"
+    }
+  ],
+  "key_features": [
+    "CPU-only execution (no GPU required)",
+    "Synthetic face generation for demo",
+    "Haar Cascade face detection (lightweight YOLO alternative)",
+    "Simulated 512-dim embeddings (ArcFace simulation)",
+    "Cosine similarity matching with threshold demo",
+    "Matplotlib visualizations with bounding boxes",
+    "Pandas DataFrame for attendance tracking",
+    "FastAPI mock endpoint demonstration",
+    "Excel export functionality",
+    "Quality control metrics visualization",
+    "Docker deployment configuration",
+    "Reveal.js export instructions",
+    "RISE interactive slideshow alternative",
+    "Speaker notes for presenters",
+    "TL;DR summaries on each slide"
+  ],
+  "dependencies": "requirements_presentation.txt",
+  "usage": {
+    "install": "pip install -r requirements_presentation.txt",
+    "run_jupyter": "jupyter notebook FaceRecognition_Attendance_Presentation.ipynb",
+    "export_slides": "jupyter nbconvert FaceRecognition_Attendance_Presentation.ipynb --to slides --reveal-prefix https://unpkg.com/reveal.js@4.3.1/ --post serve",
+    "rise_slideshow": "pip install RISE && open notebook && press Alt+R"
+  },
+  "notes": [
+    "All code cells include comments explaining production alternatives",
+    "Simulation replaces heavy models (YOLO, ArcFace) for demo purposes",
+    "Self-contained: no external image dependencies",
+    "Generates synthetic data automatically",
+    "Ready for presentation without modifications"
+  ]
+}
