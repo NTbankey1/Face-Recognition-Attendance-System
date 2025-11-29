@@ -1,4 +1,4 @@
-# 📊 Tài Liệu Trình Bày Chuyên Nghiệp
+# 📊 Tài Liệu Trình Bày 
 ## Face Recognition Attendance System
 
 > **Tài liệu này được tạo để hỗ trợ thuyết trình về hệ thống điểm danh bằng nhận diện khuôn mặt**
@@ -35,12 +35,12 @@
 
 Hệ thống có thể được sử dụng trong nhiều môi trường:
 
-| Môi trường | Ứng dụng |
-|------------|----------|
-| 🎓 **Giáo dục** | Điểm danh sinh viên, theo dõi tham dự khóa học |
-| 🏢 **Doanh nghiệp** | Chấm công nhân viên, điểm danh họp |
-| 🎪 **Sự kiện** | Check-in khách mời, quản lý tham dự |
-| 🏥 **Y tế** | Điểm danh bệnh nhân, theo dõi nhân viên |
+| Môi trường         | Ứng dụng                                       |
+| ------------------ | ---------------------------------------------- |
+| 🎓 **Giáo dục**     | Điểm danh sinh viên, theo dõi tham dự khóa học |
+| 🏢 **Doanh nghiệp** | Chấm công nhân viên, điểm danh họp             |
+| 🎪 **Sự kiện**      | Check-in khách mời, quản lý tham dự            |
+| 🏥 **Y tế**         | Điểm danh bệnh nhân, theo dõi nhân viên        |
 
 ### 1.3. Thông tin Dự án
 
@@ -62,11 +62,11 @@ Hệ thống có thể được sử dụng trong nhiều môi trường:
 
 #### ❌ Phương pháp Truyền thống
 
-| Phương pháp | Nhược điểm |
-|-------------|------------|
-| 📝 **Chữ ký** | Dễ giả mạo, không chính xác |
-| 🎫 **Thẻ từ** | Dễ quên, dễ mất, cần thiết bị |
-| 👆 **Vân tay** | Cần thiết bị riêng, vệ sinh kém |
+| Phương pháp   | Nhược điểm                           |
+| ------------- | ------------------------------------ |
+| 📝 **Chữ ký**  | Dễ giả mạo, không chính xác          |
+| 🎫 **Thẻ từ**  | Dễ quên, dễ mất, cần thiết bị        |
+| 👆 **Vân tay** | Cần thiết bị riêng, vệ sinh kém      |
 | 📱 **QR Code** | Có thể chia sẻ, không xác thực người |
 
 ### 2.2. Giải pháp
@@ -223,38 +223,38 @@ Hệ thống có thể được sử dụng trong nhiều môi trường:
 ### 5.1. Technology Stack
 
 #### Backend (Face Recognition)
-| Technology | Version | Mục đích |
-|------------|---------|----------|
-| **Python** | 3.8+ | Ngôn ngữ chính |
-| **FastAPI** | Latest | RESTful API framework |
-| **YOLOv8n-face** | Latest | Face detection model |
-| **ArcFace (R100)** | Latest | Face embedding model |
-| **InsightFace** | Latest | Face recognition library |
-| **NumPy** | Latest | Numerical computing |
-| **OpenCV** | Latest | Image processing |
+| Technology         | Version | Mục đích                 |
+| ------------------ | ------- | ------------------------ |
+| **Python**         | 3.8+    | Ngôn ngữ chính           |
+| **FastAPI**        | Latest  | RESTful API framework    |
+| **YOLOv8n-face**   | Latest  | Face detection model     |
+| **ArcFace (R100)** | Latest  | Face embedding model     |
+| **InsightFace**    | Latest  | Face recognition library |
+| **NumPy**          | Latest  | Numerical computing      |
+| **OpenCV**         | Latest  | Image processing         |
 
 #### Frontend
-| Technology | Version | Mục đích |
-|------------|---------|----------|
-| **PHP** | 7.4+ | Server-side logic |
-| **JavaScript** | ES6+ | Client-side interactions |
-| **HTML5** | - | Markup |
-| **CSS3** | - | Styling |
-| **WebRTC** | - | Camera access |
+| Technology     | Version | Mục đích                 |
+| -------------- | ------- | ------------------------ |
+| **PHP**        | 7.4+    | Server-side logic        |
+| **JavaScript** | ES6+    | Client-side interactions |
+| **HTML5**      | -       | Markup                   |
+| **CSS3**       | -       | Styling                  |
+| **WebRTC**     | -       | Camera access            |
 
 #### Database & Storage
-| Technology | Version | Mục đích |
-|------------|---------|----------|
-| **MySQL** | 5.7+ | Data persistence |
-| **File System** | - | Image storage, logs |
+| Technology      | Version | Mục đích            |
+| --------------- | ------- | ------------------- |
+| **MySQL**       | 5.7+    | Data persistence    |
+| **File System** | -       | Image storage, logs |
 
 #### Deployment
-| Technology | Version | Mục đích |
-|------------|---------|----------|
-| **Docker** | Latest | Containerization |
-| **Docker Compose** | Latest | Multi-container orchestration |
-| **Apache** | 2.4+ | Web server |
-| **Nginx** | 1.18+ | Alternative web server |
+| Technology         | Version | Mục đích                      |
+| ------------------ | ------- | ----------------------------- |
+| **Docker**         | Latest  | Containerization              |
+| **Docker Compose** | Latest  | Multi-container orchestration |
+| **Apache**         | 2.4+    | Web server                    |
+| **Nginx**          | 1.18+   | Alternative web server        |
 
 ### 5.2. Models & Algorithms
 
@@ -434,23 +434,23 @@ Bước 11: Redirect đến dashboard
 
 ### 8.1. Performance Metrics
 
-| Metric | Giá trị | Mô tả |
-|--------|---------|-------|
-| **Accuracy** | 95%+ | Độ chính xác nhận diện |
-| **Speed** | ~30 FPS | Tốc độ xử lý frames |
-| **Detection Threshold** | ≥ 0.4 | Ngưỡng điểm danh |
-| **Login Threshold** | ≥ 0.55 | Ngưỡng đăng nhập |
-| **Confirmation Frames** | ≥ 2 | Số frames cần để xác nhận |
+| Metric                  | Giá trị | Mô tả                     |
+| ----------------------- | ------- | ------------------------- |
+| **Accuracy**            | 95%+    | Độ chính xác nhận diện    |
+| **Speed**               | ~30 FPS | Tốc độ xử lý frames       |
+| **Detection Threshold** | ≥ 0.4   | Ngưỡng điểm danh          |
+| **Login Threshold**     | ≥ 0.55  | Ngưỡng đăng nhập          |
+| **Confirmation Frames** | ≥ 2     | Số frames cần để xác nhận |
 
 ### 8.2. So sánh với Phương pháp Truyền thống
 
-| Tiêu chí | Thủ công | Hệ thống này |
-|----------|----------|--------------|
-| **Thời gian** | 5-10 phút | 30 giây |
-| **Độ chính xác** | 70-80% | 95%+ |
-| **Gian lận** | Dễ dàng | Rất khó |
-| **Báo cáo** | Thủ công | Tự động |
-| **Chi phí thiết bị** | Thấp | Thấp (chỉ webcam) |
+| Tiêu chí             | Thủ công  | Hệ thống này      |
+| -------------------- | --------- | ----------------- |
+| **Thời gian**        | 5-10 phút | 30 giây           |
+| **Độ chính xác**     | 70-80%    | 95%+              |
+| **Gian lận**         | Dễ dàng   | Rất khó           |
+| **Báo cáo**          | Thủ công  | Tự động           |
+| **Chi phí thiết bị** | Thấp      | Thấp (chỉ webcam) |
 
 ### 8.3. Lợi ích
 
